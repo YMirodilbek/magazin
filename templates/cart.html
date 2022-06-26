@@ -1,0 +1,92 @@
+ {% extends 'blank.html' %}  
+ {% load static %}
+ {% block content %}
+ 
+   <!-- breadcrumb start -->
+   
+    <!-- breadcrumb end -->
+    <!-- cart start -->
+	<link type="text/css" rel="stylesheet" href="{% static 'cart/bootstrap.min.css'%}"/>
+	<link type="text/css" rel="stylesheet" href="{% static 'cart/style.css'%}"/>
+    <div class="pa-cart spacer-top spacer-bottom">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="pa-cart-box">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Product image</th>
+                                    <th>Product name</th>
+                                    <th>unit price</th>
+                                    <th>Quantity</th>
+                                    <th>Total</th>
+									<th>Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+								{% for i in filteredprod%}
+									<tr>
+										<td>
+											<div class="pa-cart-img">
+												<img src="{{i.product.photo.url}}" alt="image" class="img-fluid"/>
+											</div>
+										</td>
+										<td>
+											{{i.product.name}}
+										</td>
+										{% if i.product.discount%}
+											<td>${{i.product.discount}}</td>
+										{% else%}
+											<td>${{i.product.price}}</td>
+										{% endif%}
+
+										<td>
+											<div class="pa-cart-quantity">
+												<button class="pa-sub"></button>
+												<input type="number" value="{{i.quantity}}" min="1"/>
+												<button class="pa-add"></button>
+											</div>
+										</td>
+										<td>${{i.total}}</td>
+										<td><a href="/delete-cart/{{i.id}}"> Delete</a></td>
+									</tr>
+								{% endfor%}
+                                
+                                <tr>
+                                    <td colspan="4" class="pa-cart-total">
+                                        <p>Sub Total:</p>
+                                    </td>
+                                    <td class="pa-cart-total-price">
+                                        <p>${{i.product.total}}</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3"><a href="shop.html" class="pa-btn">continue Shopping</a></td>
+                                    <td colspan="2" class="pa-cart-update"><button class="pa-btn">update cart</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="pa-garnd-total">
+                            <p>
+                                <span>Shipping charges</span>
+                                <span>$20</span>
+                            </p>
+                            <p>
+                                <span>GST</span>
+                                <span>18%</span>
+                            </p>
+                            <p>
+                                <span>Grant total:</span>
+                                <span>$660</span>
+                            </p>
+                            <a href="checkout.html" class="pa-btn">Proceed to checkout</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- cart end -->
+	{% endblock content %}
+  
