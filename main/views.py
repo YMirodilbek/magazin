@@ -1,3 +1,4 @@
+import email
 from django.contrib import messages
 from http import client
 from django.contrib.auth import authenticate,login,logout
@@ -5,6 +6,8 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from.models import *
+from .forms import *
+from django.contrib.auth.forms import UserCreationForm
 from django.views.generic import DetailView
 # Create your views here.
 
@@ -119,40 +122,38 @@ def DeleteCart(request,id):
 
     return redirect('/cart/')
 
-def Login(request):
-    if request.method =='POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        log = authenticate(request,username=username,password=password)
-        print(username,password)
-        if log is not None:
-            login(request,log)
-            messages.success(request,'Tizimga Kirildi!')
-            return redirect('/')
-        else:
-            messages.error(request,'login yoki userrname xato!')
-            return redirect('/login/')        
-
-    return render(request,'login.html')
 
 def Register(request):
-    if request.method=='POST':
-        l = request.POST
-        username = l['username']
-        password = l['password']
-        first_name = l['first_name']
-        last_name = l['last_name']
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            return redirect('/login/')
-        else:
-            user=User.objects.create(username=username, password=password, first_name=first_name, last_name=last_name)
-            login(request, user)
-            messages.success(request, "Tizimga muvaffaqiyatli kirdingiz!")
-            return redirect('/')
+    form = UserCreationForm() 
+    if request.method=="POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            print(f'form.email')
+    context = {
+        'form':form,
+    } 
+    
+    return render(request,'register.html',context)
 
-    else:
-        return render(request, 'register.html')
+def Login(request):
+    return render(request,'login.html')
+ 
+
+def ContactPage(request):
+ 
+    return render(request,'contact.html')
+
+def Sending(request):
+    if request.method=='POST':
+        r = request.POST
+        full_name=r['full_name']
+        email=r['email']
+        phone=r['phone']
+        text=r['text']
+        Contact.objects.create(full_name=full_name,email=email,phone=phone,text=text)
+       
+    return redirect('/contact/')
 
 
 

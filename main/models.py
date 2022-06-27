@@ -48,4 +48,13 @@ class ShopItems(models.Model):
 
     # class Register(models.Model):
     #     userna
+
+class Contact(models.Model):
+    full_name = models.CharField(max_length=150)
+    email = models.CharField(max_length=30)
+    phone = models.CharField(max_length=11)
+    text = models.TextField()   
+    def __str__(self):
+        return self.full_name
+    
         

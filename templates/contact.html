@@ -1,0 +1,58 @@
+{% extends 'blank.html' %}
+{% load static %}
+{% block content %}
+<style>
+      
+    textarea{
+    width: 100%;
+    height: 200px;
+    padding: 10px 20px;
+    border: 2px solid #D10024;
+    outline: none;
+    border-radius: 10px;
+    resize: none;
+}
+
+    
+    
+    
+</style>
+<form action="/sendmess/" method="post">
+    {% csrf_token %}
+    <div class="pa-checkout spacer-bottom">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3">
+                </div>
+                <div class="col-lg-6">
+                    <div class="pa-bill-form">
+                        <form action="/register/" method="post">
+                            {% csrf_token %}
+                            <label>
+                                <span>Full Name</span>
+                                <input type="text" placeholder="Full Name" name="full_name"/>
+                            </label>
+                            <label>
+                                <span>Email</span>
+                                <input type="text" placeholder="E@mail" name="email"/>
+                            </label>
+                            <label>
+                                <span>Phone</span>
+                                <input type="text" placeholder="Phone" name="phone">
+                            </label>
+                            <label>
+                                <span>Message</span>
+                                <textarea name="text" placeholder="Message" ></textarea>
+                            </label>
+                            
+                            <div class="pa-place-order-btn">
+                                <input type="submit" value="Send">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock content %}

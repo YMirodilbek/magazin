@@ -13,7 +13,7 @@
         width: 100%;
         height: 50px;
         padding:0px 20px;
-        border: 1px solid #6caaa8;
+        border: 2px solid #D10024;
         outline: none;
         border-radius: 50px;
     }
@@ -22,12 +22,9 @@
       -webkit-appearance: none;
       margin: 0;
     }
-    .pa-place-order-btn {
-        text-align: right;
-        margin-top: 30px;
-    }
+    
     .pa-btn{
-        background: #6caaa8;
+        background: #D10024;
         color: #fff;
         padding: 0px 20px;
         min-width: 160px;
@@ -39,14 +36,14 @@
         outline: none;
         text-align: center;
         cursor: pointer;
-        border: 2px solid #6caaa8;
+        border: 2px solid #D10024;
         transition: 0.3s;
         display: inline-block;
     }
     .pa-btn:hover{
         outline: none;
-        background: #fff;
-        color: #6caaa8;
+        background: #D10024;
+        color: #D10024;
     }
     .pa-btn:focus,.modal-header .close {
         outline: none;
@@ -84,14 +81,17 @@
         font-weight: 600;
     }
     .pa-checkout-total td:last-child {
-        color: #6caaa8;
+        color: #D10024;
     }
     .pa-place-order-btn {
         text-align: right;
         margin-top: 30px;
+        margin-left: 80%;
+        width: 150px;
+        font-family: sans-serif;
+        
+
     }
-    
-    
     
 </style>
     <!-- breadcrumb end -->
@@ -107,19 +107,19 @@
                             {% csrf_token %}
                             <label>
                                 <span>Username</span>
-                                <input type="text" name="username"/>
+                                {{form.username}}
                             </label>
+                            
+                                <span>Email</span>
+                                {{form.form}}
+                            
                             <label>
                                 <span>Password</span>
-                                <input type="text" name="password"/>
+                                {{form.password1}}
                             </label>
                             <label>
-                                <span>First Name</span>
-                                <input type="text" name="first_name">
-                            </label>
-                            <label>
-                                <span>Last Name</span>
-                                <input type="text" name="last_name"/>
+                                <span>Password Confirm</span>
+                                {{form.password2}}
                             </label>
                             
                             <div class="pa-place-order-btn">

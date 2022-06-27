@@ -12,6 +12,8 @@ urlpatterns = [
     path('delete-cart/<int:id>',DeleteCart),
     path('login/',Login),
     path('register/',Register),
+    path('contact/',ContactPage),
+    path('sendmess/',Sending),
 
  ]
  
