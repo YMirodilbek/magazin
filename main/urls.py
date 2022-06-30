@@ -1,5 +1,7 @@
 from django.urls import path,include
 from .views import *
+from django.contrib.auth.views import LoginView
+
 
 
 urlpatterns = [
@@ -10,8 +12,9 @@ urlpatterns = [
     path('cart/',Cart),
     path('count/',CountSavatcha),
     path('delete-cart/<int:id>',DeleteCart),
-    path('login/',Login),
-    path('register/',Register),
+    path('login/',LoginView.as_view() , name='login_url'),
+    path('register/',Register,name='register_url'),
+    path('logout/',LogOut),
     path('contact/',ContactPage),
     path('sendmess/',Sending),
 

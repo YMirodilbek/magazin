@@ -42,7 +42,7 @@
     }
     .pa-btn:hover{
         outline: none;
-        background: #D10024;
+        background: #fff;
         color: #D10024;
     }
     .pa-btn:focus,.modal-header .close {
@@ -92,6 +92,7 @@
         
 
     }
+  
     
 </style>
     <!-- breadcrumb end -->
@@ -103,27 +104,29 @@
                 </div>
                 <div class="col-lg-6">
                     <div class="pa-bill-form">
-                        <form action="/register/" method="post">
+                        <form  method="POST">
                             {% csrf_token %}
                             <label>
                                 <span>Username</span>
                                 {{form.username}}
                             </label>
-                            
-                                <span>Email</span>
-                                {{form.form}}
-                            
                             <label>
                                 <span>Password</span>
                                 {{form.password1}}
                             </label>
                             <label>
-                                <span>Password Confirm</span>
+                                <span>Confirm</span>
                                 {{form.password2}}
                             </label>
                             
                             <div class="pa-place-order-btn">
-                                <input type="submit" value="Register">
+                                <input type="submit" class="pa-btn" value="Register"/>
+                                
+                            </div>
+                            <label>
+                                {{form.errors}}
+                            </label>
+                            
                             </div>
                         </form>
                     </div>

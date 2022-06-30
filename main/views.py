@@ -6,12 +6,58 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from.models import *
-from .forms import *
 from django.contrib.auth.forms import UserCreationForm
 from django.views.generic import DetailView
-# Create your views here.
+from django.contrib.auth.views import LoginView
+from django.contrib import messages
 
-@login_required
+
+
+def Register(request):
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            user = form.cleaned_data.get('username')
+            messages.success(request,'Account was created for ' + user)
+            return redirect('/')
+    else:
+        form = UserCreationForm()
+    
+    context={
+        'form':form
+    }
+    return render(request, 'registration/register.html',context)
+
+def Login(request):
+    if request.user.is_authenticed:
+        return redirect('/')
+    else:
+        if request.method == "POST":
+            username=request.POST.get('username')
+            password=request.POST.get('password')
+
+            user = authenticate(request,username=username,password=password)
+            messages.success(request,'Account was logined for ' + user)
+
+
+            if user is not None:
+                login(request,user)
+                redirect('/')
+            
+            else:
+                messages.info(request,'Username or password is incorrect!')
+
+    return render(request,'registration/login.html')
+
+
+def LogOut(request):
+    r=request.user
+    logout(request)
+    messages.success(request,f'Mr{r}, You have successfully loged out')
+    return redirect('/login/')
+
+@login_required(login_url='login_url')
 def Home(request):
     product1 = ShopItems.objects.filter(shop__client = request.user,shop__status = 0)
     product = Product.objects.all()
@@ -62,7 +108,7 @@ def FilterCateg(request,id):
 
     return redirect('/')
 
-
+@login_required(login_url='login')
 def AddToCart(request,id):
     user = request.user
     shop = Shop.objects.filter(client=user , status = 0)
@@ -96,6 +142,7 @@ def CategoryFilter(request,id):
     }
     return render(request,'store.html',context)
 
+@login_required(login_url='login_url')
 def Cart(request):
     product = ShopItems.objects.filter(shop__client = request.user,shop__status = 0)
 
@@ -123,27 +170,17 @@ def DeleteCart(request,id):
     return redirect('/cart/')
 
 
-def Register(request):
-    form = UserCreationForm() 
-    if request.method=="POST":
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            print(f'form.email')
-    context = {
-        'form':form,
-    } 
-    
-    return render(request,'register.html',context)
 
-def Login(request):
-    return render(request,'login.html')
- 
+
+
 
 def ContactPage(request):
  
     return render(request,'contact.html')
 
+
+
+@login_required(login_url='login_url')
 def Sending(request):
     if request.method=='POST':
         r = request.POST

@@ -2,7 +2,7 @@
 {% load static %}
 {% block content%}
 <style>
-.pa-bill-form label {
+    .pa-bill-form label {
         display: flex;
         margin-bottom: 20px;
     }
@@ -42,7 +42,7 @@
     }
     .pa-btn:hover{
         outline: none;
-        background: #D10024;
+        background: #fff;
         color: #D10024;
     }
     .pa-btn:focus,.modal-header .close {
@@ -83,11 +83,18 @@
     .pa-checkout-total td:last-child {
         color: #D10024;
     }
-    .pa-place-order-btn {
+    .pa-place-order-right {
+        margin-bottom: 20px;
         text-align: right;
-        margin-top: 30px;
-        margin-left: 80%;
-        width: 150px;
+        margin-left: 20%;
+        font-family: sans-serif;
+        
+        
+    }
+    .pa-place-order-left {
+        text-align: left;
+        margin-top: 20px;
+        margin-left: 20%;
         font-family: sans-serif;
         
 
@@ -103,19 +110,25 @@
                 </div>
                 <div class="col-lg-6">
                     <div class="pa-bill-form">
-                        <form action="/login/" method="post">
+                        <form  method="POST">
                             {% csrf_token %}
                             <label>
                                 <span>Username</span>
-                                <input type="text"  name="username"/>
+                                {{form.username}}
                             </label>
                             <label>
                                 <span>Password</span>
-                                <input type="text" name="password"/>
+                                {{form.password}}
                             </label>
-                            <div class="pa-place-order-btn">
+                            <div class="pa-place-order-right">
                                 <input type="submit" class="pa-btn" value="Kirish">
                             </div>
+                            <div class="pa-place-order-left">
+                                <a href={% url 'register_url' %}><input type="text" class="pa-btn" value="Sign-up"></a>
+                            </div>
+                            <label>
+                                {{form.errors}}
+                            </label>
                         </form>
                     </div>
                 </div>

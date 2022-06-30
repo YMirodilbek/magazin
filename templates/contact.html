@@ -12,6 +12,96 @@
     border-radius: 10px;
     resize: none;
 }
+.pa-bill-form label {
+    display: flex;
+    margin-bottom: 20px;
+}
+.pa-bill-form label:last-child{
+    margin-bottom: 0;
+}
+input{
+    width: 100%;
+    height: 50px;
+    padding:0px 20px;
+    border: 2px solid #D10024;
+    outline: none;
+    border-radius: 50px;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.pa-btn{
+    background: #D10024;
+    color: #fff;
+    padding: 0px 20px;
+    min-width: 160px;
+    height: 50px;
+    line-height: 46px;
+    border: none;
+    border-radius: 50px;
+    text-transform: capitalize;
+    outline: none;
+    text-align: center;
+    cursor: pointer;
+    border: 2px solid #D10024;
+    transition: 0.3s;
+    display: inline-block;
+}
+.pa-btn:hover{
+    outline: none;
+    background: #D10024;
+    color: #D10024;
+}
+.pa-btn:focus,.modal-header .close {
+    outline: none;
+}
+.pa-checkout{
+    padding-top: 76px;
+}
+.pa-bill-form label {
+    display: flex;
+    margin-bottom: 20px;
+}
+.pa-bill-form label:last-child{
+    margin-bottom: 0;
+}
+label.pa-bill-title,p.pa-bill-title {
+    font-size: 25px;
+    font-weight: 600;
+    margin-bottom: 40px;
+}
+.pa-bill-form label span {
+    min-width: 120px;
+}
+.pa-bill-detail table th{
+    padding: 12px 20px 13px;
+    text-transform: capitalize;
+    border-right: 1px solid #eee;
+}
+.pa-bill-detail table td {
+    padding: 15px 20px;
+    text-transform: capitalize;
+    border: 1px solid #eee;
+}
+.pa-checkout-total td{
+    font-size: 20px;
+    font-weight: 600;
+}
+.pa-checkout-total td:last-child {
+    color: #D10024;
+}
+.pa-place-order-btn {
+    text-align: right;
+    margin-top: 30px;
+    margin-left: 80%;
+    width: 150px;
+    font-family: sans-serif;
+    
+
+}
 
     
     
@@ -26,7 +116,7 @@
                 </div>
                 <div class="col-lg-6">
                     <div class="pa-bill-form">
-                        <form action="/register/" method="post">
+                        <form action="" method="post">
                             {% csrf_token %}
                             <label>
                                 <span>Full Name</span>
@@ -38,7 +128,7 @@
                             </label>
                             <label>
                                 <span>Phone</span>
-                                <input type="text" placeholder="Phone" name="phone">
+                                <input type="text" placeholder="Phone" name="phone"/>
                             </label>
                             <label>
                                 <span>Message</span>
