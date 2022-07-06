@@ -44,11 +44,11 @@
 										<td>
 											<div class="pa-cart-quantity">
 												<button class="pa-sub"></button>
-												<input type="number" value="{{i.quantity}}" min="1"/>
-												<button class="pa-add"></button>
+												<div class="quantity">{{i.quantity}}</div>
+												<button style="flex: 1;" class="pa-add"></button>
 											</div>
 										</td>
-										<td>${{i.total}}</td>
+										<td>${{i.get_total}}</td>
 										<td><a href="/delete-cart/{{i.id}}"> Delete</a></td>
 									</tr>
 								{% endfor%}
@@ -58,7 +58,7 @@
                                         <p>Sub Total:</p>
                                     </td>
                                     <td class="pa-cart-total-price">
-                                        <p>${{i.product.total}}</p>
+                                        <p>${{i.get_all}}</p>
                                     </td>
                                 </tr>
                                 <tr>

@@ -1,4 +1,5 @@
 import email
+from multiprocessing import context
 from django.contrib import messages
 from http import client
 from django.contrib.auth import authenticate,login,logout
@@ -9,18 +10,18 @@ from.models import *
 from django.contrib.auth.forms import UserCreationForm
 from django.views.generic import DetailView
 from django.contrib.auth.views import LoginView
-from django.contrib import messages
 
 
 
 def Register(request):
+   
     if request.method == "POST":
         form = UserCreationForm(request.POST)
         if form.is_valid():
             form.save()
             user = form.cleaned_data.get('username')
-            messages.success(request,'Account was created for ' + user)
-            return redirect('/')
+            messages.success(request,'Account was created for <strong>{}</strong>'.format(user))
+            return redirect('/login/')
     else:
         form = UserCreationForm()
     
@@ -30,23 +31,23 @@ def Register(request):
     return render(request, 'registration/register.html',context)
 
 def Login(request):
-    if request.user.is_authenticed:
-        return redirect('/')
-    else:
-        if request.method == "POST":
-            username=request.POST.get('username')
-            password=request.POST.get('password')
+   
+    if request.method == "POST":
+        username=request.POST.get('username')
+        password=request.POST.get('password')
 
-            user = authenticate(request,username=username,password=password)
-            messages.success(request,'Account was logined for ' + user)
+        user = authenticate(request,username=username,password=password)
+        info = '<strong>{}</strong>. Account was logined !'.format(user)
+
+        messages.success(request,info)
 
 
-            if user is not None:
-                login(request,user)
-                redirect('/')
-            
-            else:
-                messages.info(request,'Username or password is incorrect!')
+        if user is not None:
+            login(request,user)
+            redirect('/')
+        
+        else:
+            messages.info(request,'Username or password is incorrect!')
 
     return render(request,'registration/login.html')
 
@@ -54,12 +55,16 @@ def Login(request):
 def LogOut(request):
     r=request.user
     logout(request)
-    messages.success(request,f'Mr{r}, You have successfully loged out')
+    info = '<strong>{}</strong>. You have successfully loged out!'.format(r)
+    messages.success(request,info)
+    print(messages)
     return redirect('/login/')
 
-@login_required(login_url='login_url')
 def Home(request):
-    product1 = ShopItems.objects.filter(shop__client = request.user,shop__status = 0)
+    try:
+        product1 = ShopItems.objects.filter(shop__client = request.user,shop__status = 0)
+    except:
+        product1 = ShopItems.objects.filter(shop__status = 0)
     product = Product.objects.all()
     prod = Product.objects.filter(Is_New=True)
 
@@ -144,8 +149,13 @@ def CategoryFilter(request,id):
 
 @login_required(login_url='login_url')
 def Cart(request):
-    product = ShopItems.objects.filter(shop__client = request.user,shop__status = 0)
-
+    # product = ShopItems.objects.filter(shop__client = request.user,shop__status = 0)
+    if request.user.is_authenticated:
+        client=request.user
+        shop,created = Shop.objects.get_or_create(client=client,status=0)
+        product=shop.shopitems_set.all()
+    else:
+        product=[]
     context ={
         'filteredprod':product
     }
@@ -171,11 +181,20 @@ def DeleteCart(request,id):
 
 
 
+def Blank(request):
+    product1 = ShopItems.objects.filter(shop__client = request.user,shop__status = 0)
+    context={
 
+        'filteredprod':product1
+
+    }
+    return render(request,'blank.html',context)
 
 
 def ContactPage(request):
- 
+    
+    
+    
     return render(request,'contact.html')
 
 
@@ -189,7 +208,9 @@ def Sending(request):
         phone=r['phone']
         text=r['text']
         Contact.objects.create(full_name=full_name,email=email,phone=phone,text=text)
-       
+        info = '<strong>{}</strong>. Xabaringiz Yuborildi! , Tez orada aloqaga chiqamiz'.format(full_name)
+        messages.success(request,info)
+
     return redirect('/contact/')
 
 

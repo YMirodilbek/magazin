@@ -6,7 +6,7 @@ from unicodedata import category
 from django.db import models
 from django.http import JsonResponse
 from django.shortcuts import render
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User,AbstractUser
 
 # Create your models here.
 
@@ -32,7 +32,7 @@ class Shop(models.Model):
     client = models.ForeignKey(User,on_delete=models.CASCADE)
     date =models.DateTimeField(auto_now_add=True)
     status = models.IntegerField(default=0)
-    total = models.IntegerField(default=0)
+    total = models.IntegerField()
     def __str__(self):
         return str(self.client)
     
@@ -40,11 +40,22 @@ class Shop(models.Model):
 class ShopItems(models.Model):
     shop = models.ForeignKey(Shop,on_delete=models.CASCADE)
     product = models.ForeignKey(Product,on_delete=models.CASCADE)
-    quantity = models.IntegerField(default=1)
-    total = models.IntegerField(default=1)
+    quantity = models.IntegerField()
+    total = models.IntegerField()
     def __str__(self):
         return str(self.id)
     
+    
+    
+    @property
+    def get_total(self):
+        if self.product.discount:
+            total = self.product.price * ((100-self.product.discount)/100)
+        else:
+            total = self.product.price * self.quantity
+        
+        return total
+
 
     # class Register(models.Model):
     #     userna
@@ -56,5 +67,9 @@ class Contact(models.Model):
     text = models.TextField()   
     def __str__(self):
         return self.full_name
+  
+    
+
+      
     
         
