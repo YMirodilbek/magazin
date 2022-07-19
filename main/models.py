@@ -1,4 +1,6 @@
 from distutils.command.upload import upload
+from doctest import register_optionflag
+import email
 from importlib.util import module_for_loader
 from itertools import product
 from multiprocessing.spawn import old_main_modules
@@ -29,19 +31,31 @@ class Product(models.Model):
         return self.name
 
 class Shop(models.Model):
-    client = models.ForeignKey(User,on_delete=models.CASCADE)
+    client = models.ForeignKey(User,on_delete=models.CASCADE,related_name='shop_client')
     date =models.DateTimeField(auto_now_add=True)
     status = models.IntegerField(default=0)
-    total = models.IntegerField()
+    total = models.IntegerField(default=0)
     def __str__(self):
         return str(self.client)
     
+    @property
+    def get_cart_total(self):
+        orderitem = self.orderitem_set.all()
+        total = sum([item.get-total for item in orderitem])
+        return total
+
+
+    @property
+    def get_cart_items(self):
+        orderitem = self.orderitem_set.all()
+        total = sum([item.get-total for item in orderitem])
+        return total
 
 class ShopItems(models.Model):
-    shop = models.ForeignKey(Shop,on_delete=models.CASCADE)
-    product = models.ForeignKey(Product,on_delete=models.CASCADE)
+    shop = models.ForeignKey(Shop,on_delete=models.CASCADE,related_name='item_savatcha')
+    product = models.ForeignKey(Product,on_delete=models.CASCADE,related_name='item_product')
     quantity = models.IntegerField()
-    total = models.IntegerField()
+    totalPay = models.IntegerField(default=0)
     def __str__(self):
         return str(self.id)
     
@@ -67,6 +81,20 @@ class Contact(models.Model):
     text = models.TextField()   
     def __str__(self):
         return self.full_name
+
+class Shipping(models.Model):
+  
+    first_name = models.CharField(max_length=200)
+    last_name = models.CharField(max_length=200)
+    email = models.EmailField()
+    region = models.CharField( max_length=200)
+    city = models.CharField(max_length=200)
+    address = models.CharField(max_length=300)
+    zipcode = models.IntegerField()
+    phone = models.IntegerField()
+    def __str__(self):
+        return self.first_name
+    
   
     
 

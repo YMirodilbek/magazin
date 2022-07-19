@@ -1,5 +1,6 @@
 import email
 from multiprocessing import context
+from urllib import request
 from django.contrib import messages
 from http import client
 from django.contrib.auth import authenticate,login,logout
@@ -31,7 +32,13 @@ def Register(request):
     return render(request, 'registration/register.html',context)
 
 def Login(request):
-   
+    product1 = ShopItems.objects.filter(shop__client = request.user,shop__status = 0)
+    
+    try:
+        count =Shop.objects.filter(client=request.user, status=0)[0].item_savatcha.all().count()
+    except:
+        count = 0
+    
     if request.method == "POST":
         username=request.POST.get('username')
         password=request.POST.get('password')
@@ -48,8 +55,12 @@ def Login(request):
         
         else:
             messages.info(request,'Username or password is incorrect!')
+    context={
+        'count':count,
+        'filteredprod':product1,
 
-    return render(request,'registration/login.html')
+    }
+    return render(request,'registration/login.html',context)
 
 
 def LogOut(request):
@@ -93,12 +104,17 @@ def Home(request):
 
             }
         new_product.append(item)
+    try:
+        count =Shop.objects.filter(client=request.user, status=0)[0].item_savatcha.all().count()
+    except:
+        count = 0
     context={
         'categ':Category.objects.all(),
         'product':new_product,
         'prod':prod,
         'filteredprod':product1,
         'new-price':new_price,
+        'count':count,
     }
     return render(request,'index.html',context)
 
@@ -108,70 +124,142 @@ class ProductDetail(DetailView):
     template_name='product.html'
     context_object_name='product'
 
+    def Prod(request):
+        try:
+            count =Shop.objects.filter(client=request.user, status=0)[0].item_savatcha.all().count()
+        except:
+            count = 0
+        product1 = ShopItems.objects.filter(shop__client = request.user,shop__status = 0)
+        context={
+
+            'filteredprod':product1,
+            'count':count
+
+        }
+        return context
 
 def FilterCateg(request,id):
 
     return redirect('/')
 
+
+def new_price(product):
+    price = product.price * ((100 - product.discount) / 100)
+
+    return price
+
+
+
+
 @login_required(login_url='login')
-def AddToCart(request,id):
-    user = request.user
-    shop = Shop.objects.filter(client=user , status = 0)
-    if len(shop)==0:
-        shop=Shop.objects.create(client=user)
+def AddToCart(request):
+    pr = request.GET.get('product')
+    prod = Product.objects.get(id=pr)
+    savat = Shop.objects.filter(client=request.user, status=0)
+    if len(savat) == 0:
+        svt = Shop.objects.create(client=request.user)
     else:
+        svt = savat[0]
+    new_p = new_price(prod)
+    svt.total += new_p
+    my_items = ShopItems.objects.filter(shop__client=request.user, shop__status=0, product=prod)
+    if len(my_items) == 0:
+        ShopItems.objects.create(shop=svt, product=prod, quantity=1, totalPay=new_p)
+    else:
+        current_item = my_items[0]
+        current_item.quantity += 1
+        current_item.totalPay += new_p
+        current_item.save()
+
+    svt.save()
    
-        shop=Shop.objects.get( client=user , status = 0)
-
-    product = Product.objects.get(id=id)
-
-    if product.discount:
-        ShopItems.objects.create(shop=shop,product=product,quantity=1,total=product.discount)
-        shop.total +=product.discount
-        shop.save()
-    else:
-        ShopItems.objects.create(shop=shop,product=product,quantity=1,total=product.price)
-        shop.total +=product.price
-        shop.save()
+    messages.success(request, f'Savatchaga <strong>{prod.name}</strong> qo`shildi.')
     
-
+    
+   
     return redirect('/')
 
 def CategoryFilter(request,id):
     print(id)
+    product1 = ShopItems.objects.filter(shop__client = request.user,shop__status = 0)
+
     filter_product = Product.objects.filter(category_id=id)
+    try:
+        count =Shop.objects.filter(client=request.user, status=0)[0].item_savatcha.all().count()
+    except:
+        count = 0
     context={
         'categ':Category.objects.all(),
-        'filter':filter_product
+        'filter':filter_product,
+        'count':count,
+        'filteredprod':product1
 
     }
     return render(request,'store.html',context)
 
 @login_required(login_url='login_url')
 def Cart(request):
-    # product = ShopItems.objects.filter(shop__client = request.user,shop__status = 0)
-    if request.user.is_authenticated:
-        client=request.user
-        shop,created = Shop.objects.get_or_create(client=client,status=0)
-        product=shop.shopitems_set.all()
-    else:
-        product=[]
-    context ={
-        'filteredprod':product
-    }
+    try:
+        count =Shop.objects.filter(client=request.user, status=0)[0].item_savatcha.all().count()
+    except:
+        count = 0
+    product1 = ShopItems.objects.filter(shop__client = request.user,shop__status = 0)
+    
+
+    context = {
+        'filteredprod':product1,
+        # 'order':shop,
+        'count':count,
+        'shop':Shop.objects.first()
+
+        }
     return render(request,'cart.html',context)
 
-def CountSavatcha(request):
-    count = ShopItems.objects.filter(shop__client=request.user, shop__status=0)
-    s = 0
-    for c in count:
-        s += c.total
-    data = {
-        'count': count.count(),
-        'total': s
-    }
+def CheckOut(request):
+    try:
+        count =Shop.objects.filter(client=request.user, status=0)[0].item_savatcha.all().count()
+    except:
+        count = 0
+    product1 = ShopItems.objects.filter(shop__client = request.user,shop__status = 0)
+    ship = Shipping.objects.all()
 
-    return JsonResponse(data)
+    context = {
+        'filteredprod':product1,
+        # 'order':shop,
+        'count':count,
+        'shop':Shop.objects.first(),
+        'ship':ship
+        }
+    return render(request,'checkout.html',context)
+
+def CheckIt(request):
+    if request.method == 'POST':
+        r = request.POST
+        first_name = r['first_name']
+        last_name = r['last_name']
+        email = r['email']
+        address = r['address']
+        city = r['city']
+        region = r['region']
+        zipcode = r['zipcode']
+        phone = r['phone']
+        Shipping.objects.create(first_name=first_name,last_name=last_name,email=email,address=address,city=city,region=region,zipcode=zipcode,phone=phone)
+        # messages.success('thanks for your shopping , your order ha been recieved ! ')
+   
+    return redirect('/checkout/')
+
+
+# def CountSavatcha(request):
+#     count = ShopItems.objects.filter(shop__client=request.user, shop__status=0)
+#     s = 0
+#     for c in count:
+#         s += c.total
+#     data = {
+#         'count': count.count(),
+#         'total': s
+#     }
+
+#     return JsonResponse(data)
 
 def DeleteCart(request,id):
     delete = ShopItems.objects.get(id=id)
@@ -182,20 +270,37 @@ def DeleteCart(request,id):
 
 
 def Blank(request):
+    try:
+        count =Shop.objects.filter(client=request.user, status=0)[0].item_savatcha.all().count()
+    except:
+        count = 0
     product1 = ShopItems.objects.filter(shop__client = request.user,shop__status = 0)
+    shop=Shop.objects.first()
     context={
 
-        'filteredprod':product1
+        'filteredprod':product1,
+        'shop':shop,
+        'coount':count
 
     }
     return render(request,'blank.html',context)
 
 
 def ContactPage(request):
+    try:
+        count =Shop.objects.filter(client=request.user, status=0)[0].item_savatcha.all().count()
+    except:
+        count = 0
+    product1 = ShopItems.objects.filter(shop__client = request.user,shop__status = 0)
     
     
+    context={
+        'count':count,
+        'filteredprod':product1
+    }
     
-    return render(request,'contact.html')
+    
+    return render(request,'contact.html',context)
 
 
 

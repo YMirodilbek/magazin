@@ -45,10 +45,10 @@
 											<div class="pa-cart-quantity">
 												<button class="pa-sub"></button>
 												<div class="quantity">{{i.quantity}}</div>
-												<button style="flex: 1;" class="pa-add"></button>
+                                                <a href="/add_cart/?product={{i.product.id}}"><button class="pa-add"></button></a>
 											</div>
 										</td>
-										<td>${{i.get_total}}</td>
+										<td>${{i.totalPay}}</td>
 										<td><a href="/delete-cart/{{i.id}}"> Delete</a></td>
 									</tr>
 								{% endfor%}
@@ -58,30 +58,15 @@
                                         <p>Sub Total:</p>
                                     </td>
                                     <td class="pa-cart-total-price">
-                                        <p>${{i.get_all}}</p>
+                                        <p>${{shop.total}}</p>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="3"><a href="shop.html" class="pa-btn">continue Shopping</a></td>
-                                    <td colspan="2" class="pa-cart-update"><button class="pa-btn">update cart</button></td>
+                                    <td colspan="3"><a href="/checkout/" class="pa-btn">continue Shopping</a></td>
                                 </tr>
                             </tbody>
                         </table>
-                        <div class="pa-garnd-total">
-                            <p>
-                                <span>Shipping charges</span>
-                                <span>$20</span>
-                            </p>
-                            <p>
-                                <span>GST</span>
-                                <span>18%</span>
-                            </p>
-                            <p>
-                                <span>Grant total:</span>
-                                <span>$660</span>
-                            </p>
-                            <a href="checkout.html" class="pa-btn">Proceed to checkout</a>
-                        </div>
+                       
                     </div>
                 </div>
             </div>

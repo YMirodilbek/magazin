@@ -93,9 +93,15 @@
 														<a href="/product-detail/{{i.id}}" class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp"></span></a>
 													</div>
 												</div>
-												<div class="add-to-cart">
-													<a href="/add_cart/{{i.id}}/" class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</a>
-												</div>
+												{% if user.is_authenticated%}
+													<div class="add-to-cart">
+														<a href="/add_cart/?product={{i.id}}" class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</a>
+													</div>
+												{% else%}
+													<div class="add-to-cart">
+														<a href="/login/" class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</a>
+													</div>
+												{% endif%}
 											</div>
 										{% endfor%}
 										<!-- /product -->

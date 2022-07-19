@@ -15,7 +15,9 @@
  		<!-- Bootstrap -->
  		<link type="text/css" rel="stylesheet" href="{% static 'css/bootstrap.min.css'%}"/>
 
-
+		 <link rel="stylesheet" href="{% static 'css/stroke-gap-icons.css'%}"/>
+		 <link rel="stylesheet" href="{% static 'css/flaticon.css'%}"/>
+		<link rel="stylesheet" href="{% static 'css/icofont.css'%}"/>
 
  		<!-- Slick -->
  		<link type="text/css" rel="stylesheet" href="{% static 'css/slick.css'%}"/>
@@ -56,7 +58,11 @@
 					<ul class="header-links pull-right">
 						<li><a href="#"><i class="fa fa-dollar"></i> USD</a></li>
 						<li><a href="/login/"><i class="fa fa-user-o"></i> My Account</a></li>
-						<li><a href="/logout/"><i></i>Logout</a></li>
+						{% if user.is_authenticated%}
+							<li><a href="/logout/"><i class="icofont-logout"></i>Logout</a></li>
+						{% else%}
+							<li><a href="/login/"><i class="icofont-logout"></i>Login</a></li>
+						{% endif%}
 					</ul>
 				</div>
 				
@@ -113,7 +119,7 @@
 									<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
 										<i class="fa fa-shopping-cart"></i>
 										<span>Your Cart</span>
-										<span  class="qty" id="count">0</span></a>
+										<span  class="qty" id="count">{{count}}</span></a>
 										
 									</a>
 									<div class="cart-dropdown">
@@ -126,19 +132,19 @@
 													<div class="product-body">
 														<h3 class="product-name"><a href="#">{{i.product.name}}</a></h3>
 														{% if i.product.discount%}
-															<h4 class="product-price"><span class="qty">1x</span>${{i.product.discount}}</h4>
+															<h4 class="product-price"><span class="qty">{{count}}x</span>${{i.product.discount}}</h4>
 														{% else%}
-															<h4 class="product-price"><span class="qty">{{i.quantity.all.count}}x</span>${{i.product.price}}</h4>
+															<h4 class="product-price"><span class="qty">{{count}}x</span>${{i.product.price}}</h4>
 														{% endif%}
 													</div>
-													<button class="delete"><i class="fa fa-close"></i></button>
+													<a href="/delete-cart/{{i.product.id}}"><button class="delete"><i class="fa fa-close"></i></button></a>
 												</div>
 											{% endfor%}
 
 										</div>
 										<div class="cart-summary">
-											<small>3 Item(s) selected</small>
-											<h5>SUBTOTAL: $2940.00</h5>
+											<small id="count">{{count}} Item(s) selected</small>
+											<h5>SUBTOTAL: ${{shop.total}}</h5>
 										</div>
 										<div class="cart-btns">
 											<a href="/cart/">View Cart</a>
