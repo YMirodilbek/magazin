@@ -47,7 +47,7 @@
 							<div class="section-nav">
 								<ul class="section-tab-nav tab-nav">
 									{% for i in categ%}
-									<li {% if i == categ.first%} class="current" {% endif%}><a data-filter="{{i.category}}" href="# ">{{i.category}}</a></li>
+									<li {% if i == categ.first%} class="current" {% endif%}><a data-filter="{{i.category}}" href="/categ/{{i.id}}/">{{i.category}}</a></li>
 									{% endfor%}
 								</ul>
 							</div>
@@ -198,39 +198,45 @@
 									<div class="products-slick" data-nav="#slick-nav-2">
 										<!-- product -->
 										{% for i in product%}
-										<div class="product">
-											<div class="product-img">
-												<img src="{{i.photo.url}}" alt="">
-												<div class="product-label">
-													<span class="sale">-30%</span>
-													<span class="new">NEW</span>
+											<div class="product">
+												<div class="product-img">
+													<img src="{{i.photo.url}}" alt="">
+													<div class="product-label">
+														<span class="sale">-30%</span>
+														<span class="new">NEW</span>
+													</div>
 												</div>
-											</div>
-											<div class="product-body">
-												<p class="product-category">{{i.category}}</p>
-												<h3 class="product-name"><a href="#">{{i.name}}</a></h3>
-												{% if i.discount%}
-													<h4 class="product-price">${{i.discount}} <del class="product-old-price">${{i.price}}</del></h4>
+												<div class="product-body">
+													<p class="product-category">{{i.category}}</p>
+													<h3 class="product-name"><a href="#">{{i.name}}</a></h3>
+													{% if i.discount%}
+														<h4 class="product-price">${{i.discount}} <del class="product-old-price">${{i.price}}</del></h4>
+													{% else%}
+														<h4 class="product-old-price"${{i.price}}></h4>
+													{% endif%}
+													<div class="product-rating">
+														<i class="fa fa-star"></i>
+														<i class="fa fa-star"></i>
+														<i class="fa fa-star"></i>
+														<i class="fa fa-star"></i>
+														<i class="fa fa-star"></i>
+													</div>
+													<div class="product-btns">
+														<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
+														<button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
+														<a href="/product-detail/{{i.id}}" class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp"></span></a>
+													</div>
+												</div>
+												{% if user.is_authenticated%}
+													<div class="add-to-cart">
+														<a href="/add_cart/?product={{i.id}}" class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</a>
+													</div>
 												{% else%}
-													<h4 class="product-old-price"${{i.price}}></h4>
+													<div class="add-to-cart">
+														<a href="/login/" class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</a>
+													</div>
 												{% endif%}
-												<div class="product-rating">
-													<i class="fa fa-star"></i>
-													<i class="fa fa-star"></i>
-													<i class="fa fa-star"></i>
-													<i class="fa fa-star"></i>
-													<i class="fa fa-star"></i>
-												</div>
-												<div class="product-btns">
-													<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
-													<button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
-													<a href="/product-detail/{{i.id}}" class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp"></span></a>
-												</div>
 											</div>
-											<div class="add-to-cart">
-												<a href='/add_cart/{{i.id}}/'><i class="fa fa-shopping-cart"></i> add to cart</a>
-											</div>
-										</div>
 										{% endfor%}
 										<!-- /product -->
 

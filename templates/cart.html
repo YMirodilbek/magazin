@@ -35,17 +35,17 @@
 										<td>
 											{{i.product.name}}
 										</td>
-										{% if i.product.discount%}
+										{% comment %} {% if i.product.discount%}
 											<td>${{i.product.discount}}</td>
-										{% else%}
-											<td>${{i.product.price}}</td>
-										{% endif%}
+										{% else%} {% endcomment %}
+										<td>${{i.product.price}}</td>
+										{% comment %} {% endif%} {% endcomment %}
 
 										<td>
 											<div class="pa-cart-quantity">
-												<button class="pa-sub"></button>
+												<a href="/subtract/?subtr={{i.id}}"><button class="pa-sub"></button></a>
 												<div class="quantity">{{i.quantity}}</div>
-                                                <a href="/add_cart/?product={{i.product.id}}"><button class="pa-add"></button></a>
+                                                <a href="/addself/?add={{i.id}}"><button class="pa-add"></button></a>
 											</div>
 										</td>
 										<td>${{i.totalPay}}</td>
@@ -59,6 +59,7 @@
                                     </td>
                                     <td class="pa-cart-total-price">
                                         <p>${{shop.total}}</p>
+                                        
                                     </td>
                                 </tr>
                                 <tr>

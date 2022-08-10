@@ -10,8 +10,8 @@ urlpatterns = [
     path('add_cart/', AddToCart),
     path('categ/<int:id>/', CategoryFilter),
     path('cart/',Cart),
-    path('checkout/',CheckOut),
-    path('checkit/',CheckIt),
+    # path('checkout/',CheckOut),
+    # path('checkit/',CheckIt),
     # path('count/',CountSavatcha),
     path('delete-cart/<int:id>',DeleteCart),
     path('login/',LoginView.as_view() , name='login_url'),
@@ -19,6 +19,9 @@ urlpatterns = [
     path('logout/',LogOut),
     path('contact/',ContactPage),
     path('sendmess/',Sending),
+    path('subtract/',Subtract),
+    path('addself/',AddSelf),
 
+   
  ]
  

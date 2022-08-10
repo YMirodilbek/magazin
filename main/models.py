@@ -69,6 +69,7 @@ class ShopItems(models.Model):
             total = self.product.price * self.quantity
         
         return total
+    
 
 
     # class Register(models.Model):

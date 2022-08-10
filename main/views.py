@@ -130,6 +130,7 @@ class ProductDetail(DetailView):
         except:
             count = 0
         product1 = ShopItems.objects.filter(shop__client = request.user,shop__status = 0)
+        
         context={
 
             'filteredprod':product1,
@@ -179,6 +180,7 @@ def AddToCart(request):
    
     return redirect('/')
 
+    
 def CategoryFilter(request,id):
     print(id)
     product1 = ShopItems.objects.filter(shop__client = request.user,shop__status = 0)
@@ -204,49 +206,42 @@ def Cart(request):
     except:
         count = 0
     product1 = ShopItems.objects.filter(shop__client = request.user,shop__status = 0)
+    # shopping = Shop.objects.get()
     
 
     context = {
         'filteredprod':product1,
         # 'order':shop,
         'count':count,
-        'shop':Shop.objects.first()
+        'shop':Shop.objects.first(),
+        
+        
 
         }
     return render(request,'cart.html',context)
 
-def CheckOut(request):
-    try:
-        count =Shop.objects.filter(client=request.user, status=0)[0].item_savatcha.all().count()
-    except:
-        count = 0
-    product1 = ShopItems.objects.filter(shop__client = request.user,shop__status = 0)
-    ship = Shipping.objects.all()
+# def CheckOut(request):
+#     try:
+#         count =Shop.objects.filter(client=request.user, status=0)[0].item_savatcha.all().count()
+#     except:
+#         count = 0
+#     product1 = ShopItems.objects.filter(shop__client = request.user,shop__status = 0)
+#     shop = Shop.objects.get(status=1)
+#     items = ShopItems.objects.filter(shop_id= shop)
+#     context = {
+#         'filteredprod':product1,
+#         # 'order':shop,
+#         'count':count,
+#         'shop':Shop.objects.first(),
+#         'items':items,
+#         }
+#     return render(request,'checkout.html',context)
 
-    context = {
-        'filteredprod':product1,
-        # 'order':shop,
-        'count':count,
-        'shop':Shop.objects.first(),
-        'ship':ship
-        }
-    return render(request,'checkout.html',context)
-
-def CheckIt(request):
-    if request.method == 'POST':
-        r = request.POST
-        first_name = r['first_name']
-        last_name = r['last_name']
-        email = r['email']
-        address = r['address']
-        city = r['city']
-        region = r['region']
-        zipcode = r['zipcode']
-        phone = r['phone']
-        Shipping.objects.create(first_name=first_name,last_name=last_name,email=email,address=address,city=city,region=region,zipcode=zipcode,phone=phone)
-        # messages.success('thanks for your shopping , your order ha been recieved ! ')
-   
-    return redirect('/checkout/')
+# def CheckIt(request):
+#     shop = Shop.objects.get(status = 0)
+#     shop.status = 1
+#     shop.save()
+#     return redirect('/checkout/')
 
 
 # def CountSavatcha(request):
@@ -263,6 +258,9 @@ def CheckIt(request):
 
 def DeleteCart(request,id):
     delete = ShopItems.objects.get(id=id)
+    shop = Shop.objects.all()
+    shop.total -=delete.totalPay
+    delete.save()
     delete.delete()
 
     return redirect('/cart/')
@@ -279,8 +277,10 @@ def Blank(request):
     context={
 
         'filteredprod':product1,
-        'shop':shop,
-        'coount':count
+        # 'shop':shop,
+        'coount':count,
+        'categ':Category.objects.all(),
+
 
     }
     return render(request,'blank.html',context)
@@ -318,6 +318,36 @@ def Sending(request):
 
     return redirect('/contact/')
 
+def Subtract(request):
+
+    shop = ShopItems.objects.get()
+    shop.quantity -= 1
+    shop1=Shop.objects.get()
+
+    # if shop.product.discount:
+    #     shop.totalPay -= shop.product.discount
+    # else:
+    shop1.total -= shop.product.price 
+    shop.totalPay -= shop.product.price
+
+    shop1.save()
+    shop.save()
+    return redirect('/cart/')
+
+ 
+def AddSelf(request):
+    
+    shop = ShopItems.objects.get()
+    shop.quantity += 1
+    shop1=Shop.objects.get()
+    # if shop.product.discount:
+    #     shop.totalPay += shop.product.discount
+    # else:
+    shop1.total += shop.product.price
+    shop.totalPay += shop.product.price
+    shop.save()
+    shop1.save()
+    return redirect('/cart/')
 
 
     
