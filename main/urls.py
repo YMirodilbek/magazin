@@ -19,8 +19,8 @@ urlpatterns = [
     path('logout/',LogOut),
     path('contact/',ContactPage),
     path('sendmess/',Sending),
-    path('subtract/',Subtract),
-    path('addself/',AddSelf),
+    path('subtract/<int:id>/',Subtract),
+    path('addself/<int:id>/',AddSelf),
 
    
  ]

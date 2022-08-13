@@ -258,9 +258,6 @@ def Cart(request):
 
 def DeleteCart(request,id):
     delete = ShopItems.objects.get(id=id)
-    shop = Shop.objects.all()
-    shop.total -=delete.totalPay
-    delete.save()
     delete.delete()
 
     return redirect('/cart/')
@@ -318,9 +315,9 @@ def Sending(request):
 
     return redirect('/contact/')
 
-def Subtract(request):
+def Subtract(request,id):
 
-    shop = ShopItems.objects.get()
+    shop = ShopItems.objects.get(id=id)
     shop.quantity -= 1
     shop1=Shop.objects.get()
 
@@ -335,9 +332,9 @@ def Subtract(request):
     return redirect('/cart/')
 
  
-def AddSelf(request):
+def AddSelf(request,id):
     
-    shop = ShopItems.objects.get()
+    shop = ShopItems.objects.get(id=id)
     shop.quantity += 1
     shop1=Shop.objects.get()
     # if shop.product.discount:
