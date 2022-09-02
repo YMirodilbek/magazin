@@ -1,4 +1,5 @@
 import email
+from hmac import new
 from multiprocessing import context
 from urllib import request
 from django.contrib import messages
@@ -54,7 +55,7 @@ def Login(request):
             redirect('/')
         
         else:
-            messages.info(request,'Username or password is incorrect!')
+            messages.success(request,'Username or password is incorrect!')
     context={
         'count':count,
         'filteredprod':product1,
@@ -127,7 +128,7 @@ class ProductDetail(DetailView):
     def Prod(request):
         try:
             count =Shop.objects.filter(client=request.user, status=0)[0].item_savatcha.all().count()
-        except:
+        except:   
             count = 0
         product1 = ShopItems.objects.filter(shop__client = request.user,shop__status = 0)
         
@@ -183,7 +184,7 @@ def AddToCart(request):
     
 def CategoryFilter(request,id):
     print(id)
-    product1 = ShopItems.objects.filter(shop__client = request.user,shop__status = 0)
+    product1 = ShopItems.objects.filter(shop__status = 0)
 
     filter_product = Product.objects.filter(category_id=id)
     try:
@@ -258,6 +259,10 @@ def Cart(request):
 
 def DeleteCart(request,id):
     delete = ShopItems.objects.get(id=id)
+    shop = Shop.objects.get(client=request.user)
+    shop.total -=delete.totalPay
+
+    shop.save()
     delete.delete()
 
     return redirect('/cart/')
@@ -319,7 +324,7 @@ def Subtract(request,id):
 
     shop = ShopItems.objects.get(id=id)
     shop.quantity -= 1
-    shop1=Shop.objects.get()
+    shop1=Shop.objects.get(client=request.user)
 
     # if shop.product.discount:
     #     shop.totalPay -= shop.product.discount
@@ -333,10 +338,9 @@ def Subtract(request,id):
 
  
 def AddSelf(request,id):
-    
     shop = ShopItems.objects.get(id=id)
     shop.quantity += 1
-    shop1=Shop.objects.get()
+    shop1=Shop.objects.get(client=request.user)
     # if shop.product.discount:
     #     shop.totalPay += shop.product.discount
     # else:

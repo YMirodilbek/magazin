@@ -22,6 +22,7 @@
                                     <th>Quantity</th>
                                     <th>Total</th>
 									<th>Delete</th>
+
                                 </tr>
                             </thead>
                             <tbody>
@@ -43,13 +44,22 @@
 
 										<td>
 											<div class="pa-cart-quantity">
-												<a href="/subtract/{{i.id}}/"><button class="pa-sub"></button></a>
-												<div class="quantity">{{i.quantity}}</div>
-                                                <a href="/addself/{{i.id}}/"><button class="pa-add"></button></a>
+                                                {% if i.quantity == 1%}
+												    <a href="#"><button class="pa-sub"></button></a>
+                                                {% else%}
+												    <a href="/subtract/{{i.id}}/"><button class="pa-sub"></button></a>
+												{% endif%}
+                                                <div class="quantity">{{i.quantity}}</div>
+                                                {% if i.quantity == 2%}
+                                                    <a href=""><button class="pa-add"></button></a>
+                                                {% else%}
+                                                    <a href="/addself/{{i.id}}/"><button class="pa-add"></button></a>
+                                                {% endif%}
 											</div>
 										</td>
 										<td>${{i.totalPay}}</td>
 										<td><a href="/delete-cart/{{i.id}}"> Delete</a></td>
+
 									</tr>
 								{% endfor%}
                                 
@@ -58,7 +68,13 @@
                                         <p>Sub Total:</p>
                                     </td>
                                     <td class="pa-cart-total-price">
-                                        <p>${{shop.total}}</p>
+                                        {% if user.is_authenticated%}
+                                            <p>${{shop.total}}</p>
+                                        {% else%}
+                                            <p>$0</p>
+                                        {% endif%}
+
+                                            
                                         
                                     </td>
                                 </tr>
