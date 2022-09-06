@@ -209,9 +209,9 @@ def Cart(request):
         count = 0
     product1 = ShopItems.objects.filter(shop__client = request.user,shop__status = 0)
     # shopping = Shop.objects.get()
-    shop1=Shop.objects.filter(client=request.user, status=0)[0],
     try:
-        shop1
+        shop1=Shop.objects.filter(client=request.user, status=0)[0],
+        
     except:
         shop1={'total':0}
     
