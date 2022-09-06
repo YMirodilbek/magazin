@@ -202,6 +202,7 @@ def CategoryFilter(request,id):
 
 @login_required(login_url='login_url')
 def Cart(request):
+    
     try:
         count =Shop.objects.filter(client=request.user, status=0)[0].item_savatcha.all().count()
     except:
@@ -214,7 +215,7 @@ def Cart(request):
         'filteredprod':product1,
         # 'order':shop,
         'count':count,
-        'shop':Shop.objects.first(),
+        'shop':Shop.objects.filter(client=request.user, status=0)[0],
         
         
 
