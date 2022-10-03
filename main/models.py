@@ -38,18 +38,8 @@ class Shop(models.Model):
     def __str__(self):
         return str(self.client)
     
-    @property
-    def get_cart_total(self):
-        orderitem = self.orderitem_set.all()
-        total = sum([item.get-total for item in orderitem])
-        return total
-
-
-    @property
-    def get_cart_items(self):
-        orderitem = self.orderitem_set.all()
-        total = sum([item.get-total for item in orderitem])
-        return total
+   
+    
 
 class ShopItems(models.Model):
     shop = models.ForeignKey(Shop,on_delete=models.CASCADE,related_name='item_savatcha')
@@ -58,6 +48,18 @@ class ShopItems(models.Model):
     totalPay = models.IntegerField(default=0)
     def __str__(self):
         return str(self.id)
+    
+    @property
+    def price(self):
+        return (self.product.price)
+
+    @property
+    def amount(self):
+        return (self.quantity * self.product.price)
+
+    @property
+    def varamount(self):
+        return (self.quantity + self.product.price)
     
     
     
@@ -69,6 +71,11 @@ class ShopItems(models.Model):
             total = self.product.price * self.quantity
         
         return total
+    @property
+    def Totalget(self):
+
+        self.shop.total += self.totalPay
+        return self.shop.total
     
 
 

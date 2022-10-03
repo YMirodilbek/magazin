@@ -38,13 +38,13 @@
 							<div class="price-filter">
 								<div id="price-slider"></div>
 								<div class="input-number price-min">
-									<input id="price-min" type="number">
+									<input id="price-min" unchange = "getdata()" type="number">
 									<span class="qty-up">+</span>
 									<span class="qty-down">-</span>
 								</div>
 								<span>-</span>
 								<div class="input-number price-max">
-									<input id="price-max" type="number">
+									<input id="price-max"unchange="getdata()" type="number">
 									<span class="qty-up">+</span>
 									<span class="qty-down">-</span>
 								</div>
@@ -254,6 +254,12 @@
 		<!-- /FOOTER -->
 
 		<!-- jQuery Plugins -->
-
+		{% block js %}
+			<script>
+			function getdata(){
+				console.log("success")
+			}	
+			</script>
+		{% endblock js %}
 	</body>
 </html>

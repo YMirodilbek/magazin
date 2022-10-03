@@ -68,11 +68,9 @@
                                         <p>Sub Total:</p>
                                     </td>
                                     <td class="pa-cart-total-price">
-                                        {% if user.is_authenticated%}
-                                            <p>${{shop.total}}</p>
-                                        {% else%}
-                                            <p>$0</p>
-                                        {% endif%}
+                                     
+                                        <p>${{order.total}}</p>
+                                        
 
                                             
                                         

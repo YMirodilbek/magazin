@@ -211,14 +211,15 @@ def Cart(request):
     # shopping = Shop.objects.get()
     try:
         shop1=Shop.objects.filter(client=request.user, status=0)[0],
-        
+        print('try ishladi')
     except:
+        print('except ishladi')
         shop1={'total':0}
-    
+    print(shop1)
 
     context = {
         'filteredprod':product1,
-        # 'order':shop,
+        'order':Shop.objects.first(),
         'count':count,
         'shop':shop1
         
@@ -359,4 +360,8 @@ def AddSelf(request,id):
 
 
     
-
+def GetFilter(request):
+    dt = {
+        
+    }
+    return JsonResponse(dt)
