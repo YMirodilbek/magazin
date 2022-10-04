@@ -216,12 +216,12 @@ def Cart(request):
         print('except ishladi')
         shop1={'total':0}
     print(shop1)
+    
 
     context = {
         'filteredprod':product1,
-        'order':Shop.objects.first(),
+        # 'order':shop,
         'count':count,
-        'shop':shop1
         
         
         

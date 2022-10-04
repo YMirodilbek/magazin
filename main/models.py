@@ -50,17 +50,10 @@ class ShopItems(models.Model):
         return str(self.id)
     
     @property
-    def price(self):
-        return (self.product.price)
-
-    @property
-    def amount(self):
-        return (self.quantity * self.product.price)
-
-    @property
-    def varamount(self):
-        return (self.quantity + self.product.price)
-    
+    def get_cart_total(self):
+        orderitem = self.orderitem_set.all()
+        total = sum(item.get_total for item in orderitem)
+        return total
     
     
     @property
