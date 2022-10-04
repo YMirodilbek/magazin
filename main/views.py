@@ -220,7 +220,7 @@ def Cart(request):
 
     context = {
         'filteredprod':product1,
-        # 'order':shop,
+        'order':Shop.objects.first(),
         'count':count,
         
         
