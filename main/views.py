@@ -210,7 +210,7 @@ def Cart(request):
     product1 = ShopItems.objects.filter(shop__client = request.user,shop__status = 0)
     # shopping = Shop.objects.get()
     try:
-        shop1=Shop.objects.filter(client=request.user, status=0)[0],
+        shop1=Shop.objects.filter(client=request.user, status=0)[0]
         print('try ishladi')
     except:
         print('except ishladi')
