@@ -359,9 +359,7 @@ def AddSelf(request,id):
     return redirect('/cart/')
 
 
-    
-def GetFilter(request):
-    dt = {
-        
-    }
-    return JsonResponse(dt)
+def e404(request):
+    return render(request,'404file/index.html') 
+def error_404(request,exception):
+    return render(request,'404.html')

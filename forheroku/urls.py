@@ -17,12 +17,14 @@ from django.contrib import admin
 from django.urls import path,include
 from django.conf.urls.static import static
 from django.conf import settings
-from main.views import Login
+from main.views import *
+from django.conf.urls import handler404
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('main.urls')),
     path('manage/',include('managing.urls')),
+    path('404/',e404),
     path('login/',Login),
 ] +static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
-
+handler404 = 'main.views.error_404'

@@ -21,7 +21,6 @@ urlpatterns = [
     path('sendmess/',Sending),
     path('subtract/<int:id>/',Subtract),
     path('addself/<int:id>/',AddSelf),
-    path('getfilter/',GetFilter)
 
    
  ]
